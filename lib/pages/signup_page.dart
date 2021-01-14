@@ -94,7 +94,7 @@ class _SingUpPageState extends State<SingUpPage> {
                   width: double.infinity,
                   alignment: Alignment.centerRight,
                   child: FlatButton(
-                    child: Text("Already you have account? \t Sign In"),
+                    child: Text("Already you have account? \tSign In"),
                     textColor: Colors.black,
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, SignInPage.id);
