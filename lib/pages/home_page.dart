@@ -16,9 +16,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  var isLoading = false;
+
   List<Post> items = new List();
 
   _apiLoadStore() async {
+    setState(() {
+      isLoading = true;
+    });
     var id = await Pref.loadUserId();
     RTDBService.loadPosts(id).then((posts) => {
       _respPost(posts)
@@ -27,6 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   _respPost(List<Post> posts) {
     setState(() {
+      isLoading = false;
       items = posts;
     });
   }
@@ -68,11 +74,19 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (ctx, i) {
-          return _itemOfList(items[i]);
-        },
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (ctx, i) {
+              return _itemOfList(items[i]);
+            },
+          ),
+
+          isLoading ? Center(
+            child: CircularProgressIndicator(),
+          ) : SizedBox.shrink()
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -88,6 +102,13 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            height: 200,
+            width: double.infinity,
+            child: post.imgUrl != null ?
+            Image.network(post.imgUrl, fit: BoxFit.cover,) :
+            Image.asset('assets/images/placeholder.jpg'),
+          ),
           Text(post.firstname + ' ' + post.lastname, style: TextStyle(color: Colors.black, fontSize: 20),),
           SizedBox(height: 5,),
           Text(post.date),
