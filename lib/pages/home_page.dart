@@ -18,7 +18,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   var isLoading = false;
-  FirebaseUser _user;
   List<Post> items = new List();
 
   _apiLoadStore() async {
@@ -55,9 +54,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    AuthService.getCurrentUser().then((user) => {
-    items.add(Post(user.uid, "Firstname", "Lastname", "Content", "Date", null))
-    });
+    AuthService.getCurrentUser();
     _apiLoadStore();
   }
 

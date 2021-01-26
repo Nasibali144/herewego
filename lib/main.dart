@@ -10,7 +10,11 @@ void main() {
   runApp(MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
+
+  static final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
   Widget _startPage() {
     return StreamBuilder(
@@ -30,6 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,

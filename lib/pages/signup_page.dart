@@ -1,10 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:herewego/pages/home_page.dart';
 import 'package:herewego/pages/signin_page.dart';
 import 'package:herewego/services/auth_service.dart';
-import 'package:herewego/services/pref_service.dart';
-import 'package:herewego/services/utils_service.dart';
 
 class SingUpPage extends StatefulWidget {
 
@@ -30,22 +26,23 @@ class _SingUpPageState extends State<SingUpPage> {
       isLoading = true;
     });
 
-    AuthService.signUpUser(name, email, password).then((authResult) => {
-      _getFirebaseUser(authResult)
-    });
-  }
-
-  _getFirebaseUser(AuthResult authResult) {
+    AuthService.signUpUser(context, name, email, password);
     setState(() {
       isLoading = false;
     });
-    if(authResult != null) {
-      Pref.saveUserId(authResult.user.uid);
-      Navigator.pushReplacementNamed(context, HomePage.id);
-    } else {
-      Utils.fireToast('Check your information');
-    }
   }
+
+  // _getFirebaseUser(AuthResult authResult) {
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  //   // if(authResult != null) {
+  //   //   Pref.saveUserId(authResult.user.uid);
+  //   //   Navigator.pushReplacementNamed(context, HomePage.id);
+  //   // } else {
+  //   //   Utils.fireToast('Check your information');
+  //   // }
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,41 +1,50 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:herewego/pages/home_page.dart';
 import 'package:herewego/pages/signin_page.dart';
 import 'package:herewego/services/pref_service.dart';
+import 'package:herewego/services/utils_service.dart';
 
 class AuthService {
   static final _auth = FirebaseAuth.instance;
 
-  static Future<AuthResult> signUpUser(String name, String email, String password) async {
+  static signUpUser(BuildContext context,String name, String email, String password) async {
     try {
       final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      print(newUser.user.email + '\n' + newUser.user.uid);
-      return newUser;
+      print("User email: " + newUser.user.email + '  user uid: ' + newUser.user.uid);
+
+      if(newUser != null) {
+        Pref.saveUserId(newUser.user.uid);
+        Navigator.pushReplacementNamed(context, HomePage.id);
+      } else {
+        Utils.fireToast('Check your information');
+      }
+
     } catch (e) {
       print(e.toString());
     }
   }
 
-  static Future<FirebaseUser> getCurrentUser() async {
+  static getCurrentUser() async {
     try{
       final user = await _auth.currentUser();
-      if(user != null) {
-        print(user.email + '\n' + user.uid);
-        return user;
-      } else {
-        return null;
-      }
+      print("User email: " + user.email + '  user uid: ' + user.uid);
     } catch (e) {
       print(e.toString());
     }
   }
 
-  static Future<FirebaseUser> signInUser(String email, String password) async {
+  static signInUser(BuildContext context, String email, String password) async {
     try {
       var authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
       final FirebaseUser user = authResult.user;
-      print(user.email + '\n' + user.uid);
-      return user;
+      print("User email: " + user.email + '  user uid: ' + user.uid);
+      if(user != null) {
+        Pref.saveUserId(user.uid);
+        Navigator.pushReplacementNamed(context, HomePage.id);
+      } else {
+        Utils.fireToast('Check your email or password');
+      }
     } catch(e) {
       print(e.toString());
     }
