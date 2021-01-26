@@ -28,7 +28,7 @@ class _SignInPageState extends State<SignInPage> {
       isLoading = true;
     });
 
-    AuthService.signInUser(context, email, password).then((firebaseUser) => {
+    AuthService.signInUser(email, password).then((firebaseUser) => {
       _getFirebaseUser(firebaseUser)
     });
   }

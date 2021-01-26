@@ -30,17 +30,17 @@ class _SingUpPageState extends State<SingUpPage> {
       isLoading = true;
     });
 
-    AuthService.signUpUser(context, name, email, password).then((firebaseUser) => {
-      _getFirebaseUser(firebaseUser)
+    AuthService.signUpUser(name, email, password).then((authResult) => {
+      _getFirebaseUser(authResult)
     });
   }
 
-  _getFirebaseUser(FirebaseUser firebaseUser) {
+  _getFirebaseUser(AuthResult authResult) {
     setState(() {
       isLoading = false;
     });
-    if(firebaseUser != null) {
-      Pref.saveUserId(firebaseUser.uid);
+    if(authResult != null) {
+      Pref.saveUserId(authResult.user.uid);
       Navigator.pushReplacementNamed(context, HomePage.id);
     } else {
       Utils.fireToast('Check your information');
